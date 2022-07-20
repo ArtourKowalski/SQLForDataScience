@@ -30,7 +30,7 @@ events. Determine what is wrong and correct the error.
 Starter Code:
 
   SELECT
-  COUNT(event_id) AS events
+  COUNT(DISTINCT event_id) AS events
   FROM dsv1069.events
   WHERE EVENT_NAME IN ('view_item')
 
@@ -49,7 +49,7 @@ Exercise 6:
 --Goal: For each user figure out IF a user has ordered something, and when their first purchase
 was. The query below doesn’t return info for any of the users who haven’t ordered anything.
 
-   SELECT DISTINCT u.id, u.first_name || ' ' || u.last_name AS full_name, MIN(o.created_at) AS first_order
+   SELECT DISTINCT u.id, u.first_name || ' ' || u.last_name AS full_name, MIN(o.created_at) AS first_order, COUNT(o.user_id) AS TOTAL_ORDERS
     FROM dsv1069.users U 
     LEFT JOIN dsv1069.orders O 
     ON u.id = o.user_id
