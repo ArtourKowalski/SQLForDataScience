@@ -24,4 +24,4 @@ GROUP BY
   event_time,
   user_id,
   platform
-
+ORDER BY EVENT_TIME;
