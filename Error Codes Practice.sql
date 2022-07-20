@@ -2,8 +2,6 @@ Exercise 1:
 Goal: Here we use users table to pull a list of user email addresses. Edit the query to pull email
 addresses, but only for non-deleted users.
 Starter Code:
-SELECT *
-FROM dsv1069.users
 
   SELECT email_address
   FROM dsv1069.users
@@ -30,9 +28,6 @@ Exercise 4:
 --Goal: Check out the query below. This is not the right way to count the number of viewed_item
 events. Determine what is wrong and correct the error.
 Starter Code:
-SELECT COUNT(event_id) AS events
-FROM dsv1069.events
-WHERE event_name = ‘view_item’
 
   SELECT
   COUNT(event_id) AS events
@@ -67,7 +62,7 @@ isn’t right. Check to make sure the number of users adds up, and if not, fix t
 SELECT 
     CAST((SELECT COUNT(DISTINCT USER_ID)
     FROM dsv1069.events 
-    WHERE event_name IN ('view_user_profile')) AS REAL) /
-    
+    WHERE event_name IN ('view_user_profile')) AS REAL) 
+    /
     CAST((SELECT COUNT(DISTINCT USER_ID)
     FROM dsv1069.events) AS REAL) * 100 AS PCT;
