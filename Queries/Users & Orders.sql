@@ -1,4 +1,4 @@
-/* How many times do users order from specific category? */
+/* How many times did users order from specific category? */
 
 SELECT
   DISTINCT USER_ID,
@@ -15,7 +15,7 @@ ORDER BY
   no_of_item_orders DESC,
   user_id DESC;
   
-  /* How many times do users order a specific item? */
+  /* How many times did users order a specific item? */
   
   SELECT
   DISTINCT USER_ID,
@@ -32,4 +32,12 @@ ORDER BY
   no_of_item_orders DESC,
   user_id DESC;
   
+  /* How many times did user order in total? */
   
+SELECT
+  DISTINCT user_id,
+  COUNT(invoice_id) OVER (PARTITION BY user_id) AS total_orders
+FROM
+  dsv1069.orders
+ORDER BY
+  total_orders DESC
