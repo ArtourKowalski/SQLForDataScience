@@ -33,3 +33,28 @@ FROM
       e.user_id
   ) newest_views ON TEMP.user_id = newest_views.user_id
   AND temp.most_recent_view = newest_views.RECENT
+  
+  /* Find first order time per customer */
+  
+  SELECT
+  o.invoice_id,
+  o.created_at,
+  o.user_id
+FROM
+  dsv1069.orders o
+  INNER JOIN (
+    SELECT
+      MIN(created_at) AS OLDEST,
+      user_id
+    FROM
+      dsv1069.orders
+    GROUP BY
+      user_id
+  ) OLDEST_ORDERS ON oldest_orders.user_id = o.user_id
+  AND oldest_orders.oldest = o.created_at
+GROUP BY
+  o.invoice_id,
+  o.user_id,
+  o.created_at
+ORDER BY
+  o.created_at
