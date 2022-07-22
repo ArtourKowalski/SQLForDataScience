@@ -34,7 +34,7 @@ FROM
   ) newest_views ON TEMP.user_id = newest_views.user_id
   AND temp.most_recent_view = newest_views.RECENT
   
-  /* Find first order time per customer */
+  /* Find first order date per customer */
   
   SELECT
   o.invoice_id,
