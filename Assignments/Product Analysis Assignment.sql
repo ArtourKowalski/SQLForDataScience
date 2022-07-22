@@ -1,0 +1,82 @@
+/* 1. Count how many users we have */
+
+SELECT
+  COUNT(DISTINCT ID)
+FROM
+  DSV1069.USERS;
+
+/* 2. Find out how many users have ever ordered */
+
+SELECT
+  COUNT(DISTINCT ID)
+FROM
+  dsv1069.users u
+  INNER JOIN dsv1069.orders o ON u.id = o.user_id;
+  
+ /* 3. Goal find how many users have reordered the same item - Do users even reorder once? - Yes, they do */
+ 
+SELECT
+  DISTINCT USER_ID,
+  ITEM_ID,
+  COUNT(*) OVER (PARTITION BY USER_ID, ITEM_ID) AS UNIQUE_ITEM_ORDERS
+FROM
+  DSV1069.ORDERS
+ORDER BY
+  UNIQUE_ITEM_ORDERS DESC,
+  USER_ID DESC;
+  
+  /* 4. Orders per item */
+  
+SELECT
+  DISTINCT ITEM_ID,
+  i.name,
+  COUNT(*) OVER (PARTITION BY ITEM_ID) AS ORDERS_PER_ITEM
+FROM
+  DSV1069.ORDERS o
+  JOIN DSV1069.ITEMS i ON o.item_id = i.id
+ORDER BY ORDERS_PER_ITEM DESC;
+
+/* 5. Orders per category */
+
+SELECT
+  DISTINCT ITEM_CATEGORY,
+  COUNT(*) OVER (PARTITION BY ITEM_CATEGORY) AS ORDERS_PER_CATEGORY
+FROM
+  DSV1069.ORDERS
+ORDER BY
+  ORDERS_PER_CATEGORY DESC,
+  ITEM_CATEGORY DESC;
+  
+ /* 6. Do user order multiple things from the same category - YES, they do */ 
+ 
+ SELECT
+  DISTINCT ITEM_CATEGORY,
+  USER_ID,
+  COUNT(*) OVER (PARTITION BY USER_ID, ITEM_CATEGORY) AS ORDERS_PER_CATEGORY
+FROM
+  DSV1069.ORDERS
+ORDER BY
+  ORDERS_PER_CATEGORY DESC,
+  ITEM_CATEGORY DESC, 
+  USER_ID DESC;
+
+/* 7. What is the number of average orders per category? */ 
+
+SELECT
+  TEMP.ITEM_CATEGORY,
+  AVG(TEMP.ORDERS_PER_CATEGORY) AS AVG_ORDERS_PER_CATEGORY
+FROM
+  (
+    SELECT
+      DISTINCT ITEM_CATEGORY,
+      USER_ID,
+      COUNT(*) OVER (PARTITION BY USER_ID, ITEM_CATEGORY) AS ORDERS_PER_CATEGORY
+    FROM
+      DSV1069.ORDERS
+    ORDER BY
+      ORDERS_PER_CATEGORY DESC,
+      ITEM_CATEGORY DESC,
+      USER_ID DESC
+  ) TEMP
+GROUP BY
+  TEMP.ITEM_CATEGORY
