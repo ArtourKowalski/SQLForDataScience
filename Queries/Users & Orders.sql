@@ -1,3 +1,19 @@
+/* How many unique users are there and how many unique users ordered an item? */
+
+SELECT
+  'ALL USERS COUNT' AS USER_COUNT,
+  COUNT(DISTINCT ID)
+FROM
+  dsv1069.users
+UNION
+ALL
+SELECT
+  'USERS WITH ORDERS COUNT' AS USER_ORDER_COUNT,
+  COUNT(DISTINCT ID)
+FROM
+  DSV1069.USERS u
+  JOIN dsv1069.orders O ON u.id = o.user_id;
+
 /* How many times did users order from specific category? */
 
 SELECT
