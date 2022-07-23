@@ -41,3 +41,27 @@ FROM
   dsv1069.orders
 ORDER BY
   total_orders DESC
+
+  /* What is the most expensive item per order */
+  
+  SELECT
+  *
+FROM
+  (
+    SELECT
+      invoice_id,
+      item_id,
+      price,
+      created_at,
+      RANK () OVER (
+        PARTITION BY invoice_id
+        ORDER BY
+          price DESC
+      ) AS MOST_EXPENSIVE_ITEM
+    FROM
+      DSV1069.ORDERS
+  ) TEMP
+WHERE
+  TEMP.MOST_EXPENSIVE_ITEM = 1
+ORDER BY
+  INVOICE_ID DESC;
